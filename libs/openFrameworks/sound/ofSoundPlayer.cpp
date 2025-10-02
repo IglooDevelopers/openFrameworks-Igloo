@@ -1,6 +1,8 @@
 #include "ofSoundPlayer.h"
 #include "ofLog.h"
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/common.hpp"
 
 

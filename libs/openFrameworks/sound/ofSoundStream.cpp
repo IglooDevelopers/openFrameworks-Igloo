@@ -177,6 +177,24 @@ shared_ptr<ofBaseSoundStream> ofSoundStream::getSoundStream(){
 	return soundStream;
 }
 
+bool ofSoundStream::getError()
+{
+	if (soundStream)
+	{
+		return soundStream->getError();
+	}
+	return true;
+}
+
+std::string ofSoundStream::getErrorDescription()
+{
+	if (soundStream)
+	{
+		return soundStream->getErrorDescription();
+	}
+	return "Not initialized";
+}
+
 //------------------------------------------------------------
 vector<ofSoundDevice> ofSoundStream::getDeviceList(ofSoundDevice::Api api) const{
 	if( soundStream ){
@@ -219,7 +237,7 @@ bool ofSoundStream::setup(const ofSoundStreamSettings & settings)
 {
 	if (soundStream) {
 #if defined(OF_SOUND_PLAYER_FMOD)
-		ofFmodSetBuffersize(settings.bufferSize);
+		ofFmodSetBuffersize(static_cast<unsigned int>(settings.bufferSize));
 #endif
 		return soundStream->setup(settings);
 	}

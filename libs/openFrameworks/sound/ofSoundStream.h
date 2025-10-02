@@ -86,6 +86,9 @@ public:
 	void setSoundStream(std::shared_ptr<ofBaseSoundStream> soundStreamPtr);
 	std::shared_ptr<ofBaseSoundStream> getSoundStream();
 
+	bool getError();
+	std::string getErrorDescription();
+
 	/// \brief Prints a list of available audio devices to the console
 	void printDeviceList() const;
 

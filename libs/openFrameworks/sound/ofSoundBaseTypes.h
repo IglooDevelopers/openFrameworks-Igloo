@@ -150,6 +150,9 @@ public:
 	virtual int getBufferSize() const = 0;
 	virtual ofSoundDevice getInDevice() const = 0;
 	virtual ofSoundDevice getOutDevice() const = 0;
+
+	virtual bool getError() = 0;
+	virtual std::string getErrorDescription() = 0;
 };
 
 std::string toString(ofSoundDevice::Api api);

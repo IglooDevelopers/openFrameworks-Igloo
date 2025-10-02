@@ -584,7 +584,7 @@ void ofMediaFoundationSoundPlayer::play() {
         buffer.pAudioData = mBuffer.data();
         // tell the source voice not to expect any data after this buffer
         buffer.Flags = XAUDIO2_END_OF_STREAM;  
-        buffer.AudioBytes = mBuffer.size();
+        buffer.AudioBytes = static_cast<UINT32>(mBuffer.size());
 
         hr = pSourceVoice->SubmitSourceBuffer(&buffer);
         pSourceVoice->SetVolume(mVolume);
@@ -602,7 +602,7 @@ void ofMediaFoundationSoundPlayer::play() {
             buffer.pAudioData = mBuffer.data();
             // tell the source voice not to expect any data after this buffer
             buffer.Flags = XAUDIO2_END_OF_STREAM;
-            buffer.AudioBytes = mBuffer.size();
+            buffer.AudioBytes = static_cast<UINT32>(mBuffer.size());
 
             mVoice->SubmitSourceBuffer(&buffer);
            
@@ -767,7 +767,7 @@ void ofMediaFoundationSoundPlayer::setPosition(float pct) {
                 buffer.pAudioData = mBuffer.data();
                 // tell the source voice not to expect any data after this buffer
                 buffer.Flags = XAUDIO2_END_OF_STREAM;
-                buffer.AudioBytes = mBuffer.size();
+                buffer.AudioBytes = static_cast<UINT32>(mBuffer.size());
                 uint32_t desiredSample = dpct * (double)mTotalNumFrames;
                 mNumSamplesAlreadyPlayed = desiredSample;
                 // First sample in this buffer to be played.
@@ -1052,7 +1052,7 @@ bool ofMediaFoundationSoundPlayer::_readToBuffer(IMFSourceReader* areader) {
             
             size_t numFramesRead = uint64_t(sampleBufferLength) / (bytes64 * numChannels64);
             ofLogVerbose("ofMediaFoundationSoundPlayer::_readToBuffer") << "sampleBufferLength : " << sampleBufferLength << " num frames: " << numFramesRead << std::endl;
-            totalFrames += numFramesRead;
+            totalFrames += static_cast<unsigned int>(numFramesRead);
             std::vector<BYTE> tempBuffer;
             tempBuffer.resize(sampleBufferLength, 0);
             memcpy_s(tempBuffer.data(), sampleBufferLength, audioData, sampleBufferLength);

@@ -8,7 +8,9 @@
 #include "ofSoundBuffer.h"
 #include "ofSoundUtils.h"
 #include "ofLog.h"
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/trigonometric.hpp"
 #include <limits>
 
@@ -187,7 +189,7 @@ void ofSoundBuffer::stereoPan(float left, float right){
 
 void ofSoundBuffer::copyTo(ofSoundBuffer & soundBuffer, std::size_t nFrames, std::size_t outChannels,std::size_t fromFrame,bool loop) const{
 	soundBuffer.resize(nFrames*outChannels);
-	soundBuffer.setNumChannels(outChannels);
+	soundBuffer.setNumChannels(static_cast<int>(outChannels));
 	soundBuffer.setSampleRate(samplerate);
 	soundBuffer.setTickCount(this->getTickCount());
 	soundBuffer.setDeviceID(this->getDeviceID());
@@ -202,7 +204,7 @@ void ofSoundBuffer::copyTo(ofSoundBuffer & outBuffer, std::size_t fromFrame, boo
 
 void ofSoundBuffer::addTo(ofSoundBuffer & soundBuffer, std::size_t nFrames, std::size_t outChannels,std::size_t fromFrame, bool loop) const {
 	soundBuffer.resize(nFrames*outChannels);
-	soundBuffer.setNumChannels(outChannels);
+	soundBuffer.setNumChannels(static_cast<int>(outChannels));
 	soundBuffer.setSampleRate(samplerate);
 	addTo(&soundBuffer.getBuffer()[0], nFrames, outChannels, fromFrame, loop);
 }
@@ -246,7 +248,7 @@ void ofSoundBuffer::copyTo(float * outBuffer, std::size_t nFrames, std::size_t o
 	}
 
 	// do we have anything left?
-	int framesRemaining = nFrames - (int)nFramesToCopy;
+	int framesRemaining = static_cast<int>(nFrames - (int)nFramesToCopy);
 	if (framesRemaining > 0){
 		if(!loop || size() == 0){
 			// fill with 0s
@@ -297,7 +299,7 @@ void ofSoundBuffer::addTo(float * outBuffer, std::size_t nFrames, std::size_t ou
 	}
 
 	// do we have anything left?
-	int framesRemaining = nFrames - (int)nFramesToCopy;
+	int framesRemaining = static_cast<int>(nFrames - (int)nFramesToCopy);
 	if (framesRemaining > 0 && loop){
 		// loop
 		addTo(outBuffer, framesRemaining, outChannels, 0, loop);
@@ -323,7 +325,7 @@ static bool prepareBufferForResampling(const ofSoundBuffer &in, ofSoundBuffer &o
 		return false;
 	}
 	
-	out.setNumChannels(in.getNumChannels());
+	out.setNumChannels(static_cast<int>(in.getNumChannels()));
 	out.setSampleRate(in.getSampleRate());
 	return true;
 }

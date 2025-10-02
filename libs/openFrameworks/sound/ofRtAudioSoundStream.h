@@ -31,6 +31,11 @@ public:
 	ofSoundDevice getInDevice() const;
 	ofSoundDevice getOutDevice() const;
 
+	static std::string errorText;
+	static bool gotError;
+
+	bool getError() { return gotError; };
+	std::string getErrorDescription() { return errorText; };
 
 private:
 	long unsigned long tickCount;

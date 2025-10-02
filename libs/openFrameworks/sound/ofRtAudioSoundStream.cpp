@@ -71,6 +71,27 @@ ofRtAudioSoundStream::~ofRtAudioSoundStream() {
 	close();
 }
 
+//Forward
+std::string ofRtAudioSoundStream::errorText;
+bool ofRtAudioSoundStream::gotError;
+
+void rtErrorCallback(RtAudioError::Type type, const std::string& errorText)
+{
+	ofRtAudioSoundStream::gotError = true;
+	switch (type)
+	{
+	case RtAudioError::DRIVER_ERROR:
+		ofRtAudioSoundStream::errorText = "Driver error -Set the device samplerate to 48KHz";
+		break;
+	case RtAudioError::INVALID_DEVICE:
+		ofRtAudioSoundStream::errorText = "Invalid audio device -Make sure that the device is connected";
+		break;
+	default:
+		ofRtAudioSoundStream::errorText = errorText;
+		break;
+	}
+}
+
 //------------------------------------------------------------------------------
 std::vector<ofSoundDevice> ofRtAudioSoundStream::getDeviceList(ofSoundDevice::Api api) const{
 	vector<ofSoundDevice> deviceList;
@@ -88,9 +109,18 @@ std::vector<ofSoundDevice> ofRtAudioSoundStream::getDeviceList(ofSoundDevice::Ap
 				info = audioTemp.getDeviceInfo(i);
 			}
 			catch (std::exception &error) {
-				ofLogError("ofRtAudioSoundStream") << "Error retrieving info for device " << i;
-				ofLogError() << error.what();
-				break;
+				//As we might update this list pretty often - then we are stripping the error logging here
+				//ofLogError("ofRtAudioSoundStream") << "Error retrieving info for device " << i;
+				//ofLogError() << error.what();
+
+				//As this (rather old) version of RTaudio is using the index of the device, rather than an unique ID
+				//- Then we are inserting a device, with no inputs or outputs
+				info.name = "Device error";
+				info.inputChannels = 0;
+				info.outputChannels = 0;
+				info.isDefaultInput = false;
+				info.isDefaultOutput = false;
+				info.sampleRates.clear();
 			}
 
 			ofSoundDevice dev;
@@ -106,6 +136,7 @@ std::vector<ofSoundDevice> ofRtAudioSoundStream::getDeviceList(ofSoundDevice::Ap
 		}
 	}catch (std::exception &error) {
 		ofLogError() << error.what();
+		return vector<ofSoundDevice>(); //Return a empty vector - as our sources might be out of order
 	}
 
 	return deviceList;
@@ -125,6 +156,9 @@ void ofRtAudioSoundStream::setOutput(ofBaseSoundOutput * soundOutput) {
 //------------------------------------------------------------------------------
 bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 {
+	ofRtAudioSoundStream::gotError = false;
+	ofRtAudioSoundStream::errorText = "";
+
 	if (audio != nullptr) {
 		close();
 	}
@@ -132,7 +166,7 @@ bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 	this->settings = settings_;
 
 	tickCount = 0;
-	this->settings.bufferSize = ofNextPow2(settings.bufferSize);	// must be pow2
+	this->settings.bufferSize = ofNextPow2(static_cast<int>(settings.bufferSize));	// must be pow2
 
 	try {
 		if (settings.getApi() != ofSoundDevice::Api::UNSPECIFIED) {
@@ -143,6 +177,8 @@ bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 	}
 	catch (std::exception &error) {
 		ofLogError() << error.what();
+		ofRtAudioSoundStream::gotError = true;
+		ofRtAudioSoundStream::errorText = error.what();
 		return false;
 	}
 
@@ -155,7 +191,7 @@ bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 			settings.setInDevice(device);
 		}
 		inputParameters.deviceId = settings.getInDevice()->deviceID;
-		inputParameters.nChannels = settings.numInputChannels;
+		inputParameters.nChannels = static_cast<unsigned int>(settings.numInputChannels);
 	}
 
 	if (settings.numOutputChannels > 0) {
@@ -165,25 +201,27 @@ bool ofRtAudioSoundStream::setup(const ofSoundStreamSettings & settings_)
 			settings.setOutDevice(device);
 		}
 		outputParameters.deviceId = settings.getOutDevice()->deviceID;
-		outputParameters.nChannels = settings.numOutputChannels;
+		outputParameters.nChannels = static_cast<unsigned int>(settings.numOutputChannels);
 	}
 
 	RtAudio::StreamOptions options;
 	options.flags = RTAUDIO_SCHEDULE_REALTIME;
-	options.numberOfBuffers = settings.numBuffers;
+	options.numberOfBuffers = static_cast<unsigned int>(settings.numBuffers);
 	options.priority = 1;
 	outputBuffer.setDeviceID(outputParameters.deviceId);
 	inputBuffer.setDeviceID(inputParameters.deviceId);
-	outputBuffer.setSampleRate(settings.sampleRate);
-	inputBuffer.setSampleRate(settings.sampleRate);
-	unsigned int bufferSize = settings.bufferSize;
+	outputBuffer.setSampleRate(static_cast<unsigned int>(settings.sampleRate));
+	inputBuffer.setSampleRate(static_cast<unsigned int>(settings.sampleRate));
+	unsigned int bufferSize = static_cast<unsigned int>(settings.bufferSize);
 	try {
 		audio->openStream((settings.numOutputChannels > 0) ? &outputParameters : nullptr, (settings.numInputChannels > 0) ? &inputParameters : nullptr, RTAUDIO_FLOAT32,
-			settings.sampleRate, &bufferSize, &rtAudioCallback, this, &options);
+			static_cast<unsigned int>(settings.sampleRate), &bufferSize, &rtAudioCallback, this, &options, rtErrorCallback);
 		audio->startStream();
 	}
 	catch (std::exception &error) {
 		ofLogError() << error.what();
+		ofRtAudioSoundStream::gotError = true;
+		ofRtAudioSoundStream::errorText = error.what();
 		return false;
 	}
 	return true;
@@ -224,11 +262,17 @@ void ofRtAudioSoundStream::close() {
 			audio->closeStream();
 		}
 	}
+	catch (...) { //RTAudio tends to throw a RtAudioError - but, we need to be able to catch all 
+		ofLogError("[ofRtAudioSoundStream::close]") << "Got an exception while closing the stream";
+	}
+	/*
 	catch (std::exception &error) {
 		ofLogError() << error.what();
-	}
-	settings.outCallback = nullptr;
-	settings.inCallback = nullptr;
+	}*/
+
+	//We don't want to clear out our callback functions before the RTaudio destructios are called - and in fact, there is no need to clear em.
+	//settings.outCallback = nullptr;
+	//settings.inCallback = nullptr;
 	audio.reset();	// delete
 }
 
@@ -239,22 +283,22 @@ uint64_t ofRtAudioSoundStream::getTickCount() const {
 
 //------------------------------------------------------------------------------
 int ofRtAudioSoundStream::getNumInputChannels() const {
-	return settings.numInputChannels;
+	return static_cast<int>(settings.numInputChannels);
 }
 
 //------------------------------------------------------------------------------
 int ofRtAudioSoundStream::getNumOutputChannels() const {
-	return  settings.numOutputChannels;
+	return  static_cast<int>(settings.numOutputChannels);
 }
 
 //------------------------------------------------------------------------------
 int ofRtAudioSoundStream::getSampleRate() const {
-	return settings.sampleRate;
+	return static_cast<int>(settings.sampleRate);
 }
 
 //------------------------------------------------------------------------------
 int ofRtAudioSoundStream::getBufferSize() const {
-	return settings.bufferSize;
+	return static_cast<int>(settings.bufferSize);
 }
 
 ofSoundDevice ofRtAudioSoundStream::getInDevice() const{
@@ -301,7 +345,7 @@ int ofRtAudioSoundStream::rtAudioCallback(void *outputBuffer, void *inputBuffer,
 		if (rtStreamPtr->settings.outCallback) {
 
 			if (rtStreamPtr->outputBuffer.size() != nFramesPerBuffer*nOutputChannels || rtStreamPtr->outputBuffer.getNumChannels() != nOutputChannels) {
-				rtStreamPtr->outputBuffer.setNumChannels(nOutputChannels);
+				rtStreamPtr->outputBuffer.setNumChannels(static_cast<int>(nOutputChannels));
 				rtStreamPtr->outputBuffer.resize(nFramesPerBuffer*nOutputChannels);
 			}
 			rtStreamPtr->outputBuffer.setTickCount(rtStreamPtr->tickCount);
