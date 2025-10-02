@@ -1,7 +1,9 @@
 #include "ofCamera.h"
 #include "ofGraphics.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include "of3dGraphics.h"

@@ -4,7 +4,9 @@
 #include "ofEvents.h"
 #include "ofRectangle.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/gtc/quaternion.hpp"
 
 /// \brief A super simple camera for interacting with objects in 3D space.

@@ -1978,7 +1978,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::plane(float width, float height, int columns,
 			}
 		}
 
-		if(rows%2!=0) mesh.addIndex(mesh.getNumVertices()-columns);
+		if(rows%2!=0) mesh.addIndex(static_cast<ofIndexType>(mesh.getNumVertices()-columns));
 	} else {
 		// Triangles //
 		for(int y = 0; y < rows-1; y++) {
@@ -2182,7 +2182,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 	auto& vertices = sphere.getVertices();
 	auto& faces = sphere.getIndices();
 
-	ofIndexType size = faces.size();
+	ofIndexType size = static_cast<ofIndexType>(faces.size());
 
 	/// Step 2 : tessellate
 	for (ofIndexType iteration = 0; iteration < iterations; iteration++)
@@ -2205,18 +2205,18 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 			vertices.push_back(glm::normalize(toGlm(v2+v3)));
 			vertices.push_back(glm::normalize(toGlm(v1+v3)));
 			//now recreate indices
-			newFaces.push_back(i1);
-			newFaces.push_back(i12);
-			newFaces.push_back(i13);
-			newFaces.push_back(i2);
-			newFaces.push_back(i23);
-			newFaces.push_back(i12);
-			newFaces.push_back(i3);
-			newFaces.push_back(i13);
-			newFaces.push_back(i23);
-			newFaces.push_back(i12);
-			newFaces.push_back(i23);
-			newFaces.push_back(i13);
+			newFaces.push_back(static_cast<unsigned int>(i1));
+			newFaces.push_back(static_cast<unsigned int>(i12));
+			newFaces.push_back(static_cast<unsigned int>(i13));
+			newFaces.push_back(static_cast<unsigned int>(i2));
+			newFaces.push_back(static_cast<unsigned int>(i23));
+			newFaces.push_back(static_cast<unsigned int>(i12));
+			newFaces.push_back(static_cast<unsigned int>(i3));
+			newFaces.push_back(static_cast<unsigned int>(i13));
+			newFaces.push_back(static_cast<unsigned int>(i23));
+			newFaces.push_back(static_cast<unsigned int>(i12));
+			newFaces.push_back(static_cast<unsigned int>(i23));
+			newFaces.push_back(static_cast<unsigned int>(i13));
 		}
 		faces.swap(newFaces);
 	}
@@ -2280,7 +2280,7 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::icosphere(float radius, std::size_t iteration
 		T t = texCoords[index] + T(1.f, 0.f);
 		vertices.push_back(v);
 		texCoords.push_back(t);
-		ofIndexType newIndex = vertices.size()-1;
+		ofIndexType newIndex = static_cast<ofIndexType>(vertices.size()-1);
 		//reassign indices
 		for (ofIndexType j=0;j<faces.size();j++)
 		{
@@ -2382,22 +2382,22 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cylinder( float radius, float height, int rad
 				for(int x = 0; x < radiusSegments-1; x++) {
 					if(y > 0) {
 						// first triangle //
-						mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-						mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-						mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+						mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+						mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+						mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 					}
 
 					// second triangle //
-					mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-					mesh.addIndex( (y+1)*radiusSegments + x+1 + vertOffset);
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x+1 + vertOffset));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 				}
 			}
 		} else {
 			for(int y = 0; y < capSegs-1; y++) {
 				for(int x = 0; x < radiusSegments; x++) {
-					mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 				}
 			}
 		}
@@ -2438,21 +2438,21 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cylinder( float radius, float height, int rad
 		for(int y = 0; y < heightSegments-1; y++) {
 			for(int x = 0; x < radiusSegments-1; x++) {
 				// first triangle //
-				mesh.addIndex( (y)*radiusSegments + x + vertOffset);
-				mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset );
-				mesh.addIndex( (y+1)*radiusSegments + x + vertOffset );
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset));
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset ));
 
 				// second triangle //
-				mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset );
-				mesh.addIndex( (y+1)*radiusSegments + x+1 + vertOffset );
-				mesh.addIndex( (y+1)*radiusSegments + x + vertOffset );
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x+1 + vertOffset ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset ));
 			}
 		}
 	} else {
 		for(int y = 0; y < heightSegments-1; y++) {
 			for(int x = 0; x < radiusSegments; x++) {
-				mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-				mesh.addIndex( (y+1)*radiusSegments + x + vertOffset );
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset ));
 			}
 		}
 	}
@@ -2485,23 +2485,23 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cylinder( float radius, float height, int rad
 			for(int y = 0; y < capSegs-1; y++) {
 				for(int x = 0; x < radiusSegments-1; x++) {
 					// first triangle //
-					mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-					mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 
 					if(y < capSegs -1 && capSegs > 2) {
 						// second triangle //
-						mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-						mesh.addIndex( (y+1)*radiusSegments + x+1 + vertOffset);
-						mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+						mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+						mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x+1 + vertOffset));
+						mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 					}
 				}
 			}
 		} else {
 			for(int y = 0; y < capSegs-1; y++) {
 				for(int x = 0; x < radiusSegments; x++) {
-					mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 				}
 			}
 		}
@@ -2589,22 +2589,22 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cone( float radius, float height, int radiusS
 			for(int x = 0; x < radiusSegments-1; x++) {
 				if(y > 0){
 					// first triangle //
-					mesh.addIndex( (y)*radiusSegments + x );
-					mesh.addIndex( (y)*radiusSegments + x+1 );
-					mesh.addIndex( (y+1)*radiusSegments + x );
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x ));
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 ));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x ));
 				}
 
 				// second triangle //
-				mesh.addIndex( (y)*radiusSegments + x+1 );
-				mesh.addIndex( (y+1)*radiusSegments + x+1 );
-				mesh.addIndex( (y+1)*radiusSegments + x );
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x+1 ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x ));
 			}
 		}
 	} else {
 		for(int y = 0; y < heightSegments-1; y++) {
 			for(int x = 0; x < radiusSegments; x++) {
-				mesh.addIndex( (y)*radiusSegments + x );
-				mesh.addIndex( (y+1)*radiusSegments + x );
+				mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x ));
+				mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x ));
 			}
 		}
 	}
@@ -2635,15 +2635,15 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cone( float radius, float height, int radiusS
 			for(int y = 0; y < capSegs-1; y++) {
 				for(int x = 0; x < radiusSegments-1; x++) {
 					// first triangle //
-					mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-					mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 
 					if(y < capSegs-1) {
 						// second triangle //
-						mesh.addIndex( (y)*radiusSegments + x+1 + vertOffset);
-						mesh.addIndex( (y+1)*radiusSegments + x+1 + vertOffset);
-						mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+						mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x+1 + vertOffset));
+						mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x+1 + vertOffset));
+						mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 					}
 				}
 			}
@@ -2652,8 +2652,8 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::cone( float radius, float height, int radiusS
 		if(capSegs > 0 ) {
 			for(int y = 0; y < capSegs-1; y++) {
 				for(int x = 0; x < radiusSegments; x++) {
-					mesh.addIndex( (y)*radiusSegments + x + vertOffset );
-					mesh.addIndex( (y+1)*radiusSegments + x + vertOffset);
+					mesh.addIndex(static_cast<ofIndexType>((y)*radiusSegments + x + vertOffset ));
+					mesh.addIndex(static_cast<ofIndexType>((y+1)*radiusSegments + x + vertOffset));
 				}
 			}
 		}
@@ -2716,14 +2716,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resY-1; y++) {
 		for(int x = 0; x < resX-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resX + x + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
-			mesh.addIndex((y+1)*resX + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x+1 + vertOffset));
 		}
 	}
 
@@ -2754,14 +2754,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resY-1; y++) {
 		for(int x = 0; x < resZ-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resZ + x + vertOffset);
-			mesh.addIndex((y+1)*resZ + x + vertOffset);
-			mesh.addIndex((y)*resZ + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x+1 + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resZ + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resZ + x + vertOffset);
-			mesh.addIndex((y+1)*resZ + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x+1 + vertOffset));
 		}
 	}
 
@@ -2791,14 +2791,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resY-1; y++) {
 		for(int x = 0; x < resZ-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resZ + x + vertOffset);
-			mesh.addIndex((y+1)*resZ + x + vertOffset);
-			mesh.addIndex((y)*resZ + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x+1 + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resZ + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resZ + x + vertOffset);
-			mesh.addIndex((y+1)*resZ + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resZ + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resZ + x+1 + vertOffset));
 		}
 	}
 
@@ -2828,14 +2828,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resY-1; y++) {
 		for(int x = 0; x < resX-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resX + x + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
-			mesh.addIndex((y+1)*resX + x+1 + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x+1 + vertOffset));
 		}
 	}
 
@@ -2866,14 +2866,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resZ-1; y++) {
 		for(int x = 0; x < resX-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resX + x + vertOffset);
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
 		}
 	}
 
@@ -2904,14 +2904,14 @@ ofMesh_<V,N,C,T> ofMesh_<V,N,C,T>::box( float width, float height, float depth, 
 	for(int y = 0; y < resZ-1; y++) {
 		for(int x = 0; x < resX-1; x++) {
 			// first triangle //
-			mesh.addIndex((y)*resX + x + vertOffset);
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
 
 			// second triangle //
-			mesh.addIndex((y)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x+1 + vertOffset);
-			mesh.addIndex((y+1)*resX + x + vertOffset);
+			mesh.addIndex(static_cast<ofIndexType>((y)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x+1 + vertOffset));
+			mesh.addIndex(static_cast<ofIndexType>((y+1)*resX + x + vertOffset));
 		}
 	}
 
