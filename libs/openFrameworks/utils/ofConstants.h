@@ -23,7 +23,9 @@
 #endif
 
 // This enables glm's old behavior of initializing with non garbage values
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 
 //-------------------------------
 
@@ -145,7 +147,9 @@ enum ofTargetPlatform{
 	#if (_MSC_VER)       // microsoft visual studio
 		//TODO: Fix this in the code instead of disabling the warnings
 		#define _CRT_SECURE_NO_WARNINGS
+		#ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
 		#define _WINSOCK_DEPRECATED_NO_WARNINGS
+		#endif
 
 		#include <stdint.h>
 		#include <functional>

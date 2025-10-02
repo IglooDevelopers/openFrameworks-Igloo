@@ -98,11 +98,14 @@ public:
 	};
 
 	ofXml();
-
-	bool load(const of::filesystem::path & file);
+	bool isComment();
+	ofXml duplicate(); //Adds duplicate node after this one in the document. (Also includes children)
+	ofXml duplicateToDoc(ofXml&); //Duplicates the node and children into a separate document; Returns node inside the input document
+	bool load(const of::filesystem::path & file, unsigned int options = pugi::parse_default);
 	bool load(const ofBuffer & buffer);
 	bool parse(const std::string & xmlStr);
 	bool save(const of::filesystem::path & file) const;
+	bool saveRootDocument(const of::filesystem::path& file);
 	void clear();
 	std::string toString(const std::string & indent = "\t") const;
 
@@ -113,7 +116,8 @@ public:
 	ofXml appendChild(const ofXml & xml);
 	ofXml prependChild(const ofXml & xml);
 	bool removeChild(const ofXml & node);
-
+	std::shared_ptr<pugi::xml_document> getDoc() { return doc; }
+	pugi::xml_node& getXml() { return xml; }
 #if PUGIXML_VERSION>=170
 	ofXml appendChild(ofXml && xml);
 	ofXml prependChild(ofXml && xml);
@@ -137,6 +141,8 @@ public:
 	
 	ofXml getParent() const;
 
+	const std::string path() const;
+	ofXml findByPath(const std::string& path);
 
 	Attribute getAttribute(const std::string & name) const;
 	Range<ofXmlAttributeIterator> getAttributes() const;
@@ -204,8 +210,9 @@ public:
 	float getFloatValue() const;
 	double getDoubleValue() const;
 	bool getBoolValue() const;
-
+	bool empty() const;
 	operator bool() const;
+	void reloadNode(ofXml& mainDoc);
 
 private:
 	ofXml(std::shared_ptr<pugi::xml_document> doc, const pugi::xml_node & xml);

@@ -921,7 +921,7 @@ void ofLaunchBrowser(const string& url, bool uriEncodeQuery){
 	uriToStringCharsRequiredA(&uri, &size);
 	std::vector<char> buffer(size+1, 0);
 	int written;
-	uriToStringA(buffer.data(), &uri, url.size()*2, &written);
+	uriToStringA(buffer.data(), &uri, static_cast<int>(url.size()*2), &written);
 	std::string uriStr(buffer.data(), written-1);
 	uriFreeUriMembersA(&uri);
 

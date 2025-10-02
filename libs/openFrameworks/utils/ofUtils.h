@@ -719,7 +719,7 @@ std::string ofToString(const T& value, int precision, int width, char fill ){
 template<class T>
 std::string ofToString(const std::vector<T>& values) {
 	std::stringstream out;
-	int n = values.size();
+	int n = static_cast<int>(values.size());
 	out << "{";
 	if(n > 0) {
 		for(int i = 0; i < n - 1; i++) {

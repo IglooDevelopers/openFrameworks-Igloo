@@ -644,7 +644,17 @@ bool ofFile::exists() const {
 	if(path().empty()){
 		return false;
 	}
-	return of::filesystem::exists(myFile);
+
+	bool exists = false;
+	std::error_code ec;
+	try {
+		exists = of::filesystem::exists(myFile, ec);
+	}
+	catch (...) {
+		exists = false;
+	}
+
+	return exists;
 }
 
 //------------------------------------------------------------------------------------------------------------
@@ -1281,7 +1291,9 @@ void ofDirectory::setShowHidden(bool showHidden){
 
 //------------------------------------------------------------------------------------------------------------
 bool ofDirectory::isDirectory() const {
-	return of::filesystem::is_directory(myDir);
+	// fix for 24H2 crash, see https://360igloo.atlassian.net/browse/IPG-34
+	std::error_code ec;
+	return of::filesystem::is_directory(myDir, ec);
 }
 
 //------------------------------------------------------------------------------------------------------------

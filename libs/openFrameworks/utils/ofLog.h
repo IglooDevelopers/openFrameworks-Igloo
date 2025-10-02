@@ -718,7 +718,7 @@ public:
 	/// \brief CLose the log file.
 	void close();
 
-private:
+protected:
 	ofFile file; ///< The location of the log file.
 	
 };
