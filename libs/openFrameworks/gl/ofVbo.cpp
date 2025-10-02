@@ -294,27 +294,27 @@ void ofVbo::setMesh(const ofMesh & mesh, int usage, bool useColors, bool useText
 		ofLogWarning("ofVbo") << "setMesh(): ignoring mesh with no vertices";
 		return;
 	}
-	setVertexData(mesh.getVerticesPointer(),mesh.getNumVertices(),usage);
+	setVertexData(mesh.getVerticesPointer(), static_cast<int>(mesh.getNumVertices()),usage);
 	if(mesh.hasColors() && useColors){
-		setColorData(mesh.getColorsPointer(),mesh.getNumColors(),usage);
+		setColorData(mesh.getColorsPointer(), static_cast<int>(mesh.getNumColors()),usage);
 		enableColors();
 	}else{
 		disableColors();
 	}
 	if(mesh.hasNormals() && useNormals){
-		setNormalData(mesh.getNormalsPointer(),mesh.getNumNormals(),usage);
+		setNormalData(mesh.getNormalsPointer(), static_cast<int>(mesh.getNumNormals()),usage);
 		enableNormals();
 	}else{
 		disableNormals();
 	}
 	if(mesh.hasTexCoords() && useTextures){
-		setTexCoordData(mesh.getTexCoordsPointer(),mesh.getNumTexCoords(),usage);
+		setTexCoordData(mesh.getTexCoordsPointer(), static_cast<int>(mesh.getNumTexCoords()),usage);
 		enableTexCoords();
 	}else{
 		disableTexCoords();
 	}
 	if(mesh.hasIndices()){
-		setIndexData(mesh.getIndexPointer(), mesh.getNumIndices(), usage);
+		setIndexData(mesh.getIndexPointer(), static_cast<int>(mesh.getNumIndices()), usage);
 		enableIndices();
 	}else{
 		disableIndices();
@@ -460,10 +460,10 @@ void ofVbo::setAttributeDivisor(int location, int divisor){
 
 //--------------------------------------------------------------
 void ofVbo::updateMesh(const ofMesh & mesh){
-	updateVertexData(mesh.getVerticesPointer(),mesh.getNumVertices());
-	updateColorData(mesh.getColorsPointer(),mesh.getNumColors());
-	updateNormalData(mesh.getNormalsPointer(),mesh.getNumNormals());
-	updateTexCoordData(mesh.getTexCoordsPointer(),mesh.getNumTexCoords());
+	updateVertexData(mesh.getVerticesPointer(), static_cast<int>(mesh.getNumVertices()));
+	updateColorData(mesh.getColorsPointer(), static_cast<int>(mesh.getNumColors()));
+	updateNormalData(mesh.getNormalsPointer(), static_cast<int>(mesh.getNumNormals()));
+	updateTexCoordData(mesh.getTexCoordsPointer(), static_cast<int>(mesh.getNumTexCoords()));
 }
 
 //--------------------------------------------------------------

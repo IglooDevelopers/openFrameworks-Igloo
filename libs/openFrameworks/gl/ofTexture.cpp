@@ -320,7 +320,7 @@ void ofTexture::allocate(int w, int h, int glInternalFormat, int glFormat, int p
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofPixels& pix){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -329,7 +329,7 @@ void ofTexture::allocate(const ofPixels& pix){
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofPixels& pix, bool bUseARBExtension){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -338,7 +338,7 @@ void ofTexture::allocate(const ofPixels& pix, bool bUseARBExtension){
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofShortPixels& pix){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -347,7 +347,7 @@ void ofTexture::allocate(const ofShortPixels& pix){
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofShortPixels& pix, bool bUseARBExtension){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -357,7 +357,7 @@ void ofTexture::allocate(const ofShortPixels& pix, bool bUseARBExtension){
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofFloatPixels& pix){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -366,7 +366,7 @@ void ofTexture::allocate(const ofFloatPixels& pix){
 
 //----------------------------------------------------------
 void ofTexture::allocate(const ofFloatPixels& pix, bool bUseARBExtension){
-	allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
+	allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), bUseARBExtension, ofGetGLFormat(pix), ofGetGLType(pix));
 	if((pix.getPixelFormat()==OF_PIXELS_GRAY || pix.getPixelFormat()==OF_PIXELS_GRAY_ALPHA) && ofIsGLProgrammableRenderer()){
 		setRGToRGBASwizzles(true);
 	}
@@ -588,8 +588,8 @@ void ofTexture::loadData(const ofPixels & pix){
 	if(!isAllocated()){
 		allocate(pix);
 	}else{
-		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getBytesStride());
-		loadData(pix.getData(), pix.getWidth(), pix.getHeight(), ofGetGLFormat(pix), ofGetGLType(pix));
+		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,static_cast<int>(pix.getBytesStride()));
+		loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLFormat(pix), ofGetGLType(pix));
 	}
 }
 
@@ -598,8 +598,8 @@ void ofTexture::loadData(const ofShortPixels & pix){
 	if(!isAllocated()){
 		allocate(pix);
 	}else{
-		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getBytesStride());
-		loadData(pix.getData(), pix.getWidth(), pix.getHeight(), ofGetGLFormat(pix), ofGetGLType(pix));
+		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT, static_cast<int>(pix.getBytesStride()));
+		loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLFormat(pix), ofGetGLType(pix));
 	}
 }
 
@@ -608,36 +608,36 @@ void ofTexture::loadData(const ofFloatPixels & pix){
 	if(!isAllocated()){
 		allocate(pix);
 	}else{
-		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getBytesStride());
-		loadData(pix.getData(), pix.getWidth(), pix.getHeight(), ofGetGLFormat(pix), ofGetGLType(pix));
+		ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT, static_cast<int>(pix.getBytesStride()));
+		loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLFormat(pix), ofGetGLType(pix));
 	}
 }
 
 //----------------------------------------------------------
 void ofTexture::loadData(const ofPixels & pix, int glFormat){
 	if(!isAllocated()){
-		allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
+		allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
 	}
-	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getWidth(),pix.getBytesPerChannel(),ofGetNumChannelsFromGLFormat(glFormat));
-	loadData(pix.getData(), pix.getWidth(), pix.getHeight(), glFormat, ofGetGLType(pix));
+	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getBytesPerChannel()),ofGetNumChannelsFromGLFormat(glFormat));
+	loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), glFormat, ofGetGLType(pix));
 }
 
 //----------------------------------------------------------
 void ofTexture::loadData(const ofShortPixels & pix, int glFormat){
 	if(!isAllocated()){
-		allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
+		allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
 	}
-	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getWidth(),pix.getBytesPerChannel(),ofGetNumChannelsFromGLFormat(glFormat));
-	loadData(pix.getData(), pix.getWidth(), pix.getHeight(), glFormat, ofGetGLType(pix));
+	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getBytesPerChannel()),ofGetNumChannelsFromGLFormat(glFormat));
+	loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), glFormat, ofGetGLType(pix));
 }
 
 //----------------------------------------------------------
 void ofTexture::loadData(const ofFloatPixels & pix, int glFormat){
 	if(!isAllocated()){
-		allocate(pix.getWidth(), pix.getHeight(), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
+		allocate(static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), ofGetGLInternalFormat(pix), ofGetUsingArbTex(), glFormat, ofGetGLType(pix));
 	}
-	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT,pix.getWidth(),pix.getBytesPerChannel(),ofGetNumChannelsFromGLFormat(glFormat));
-	loadData(pix.getData(), pix.getWidth(), pix.getHeight(), glFormat, ofGetGLType(pix));
+	ofSetPixelStoreiAlignment(GL_UNPACK_ALIGNMENT, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getBytesPerChannel()),ofGetNumChannelsFromGLFormat(glFormat));
+	loadData(pix.getData(), static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), glFormat, ofGetGLType(pix));
 }
 
 #ifndef TARGET_OPENGLES
@@ -1219,7 +1219,7 @@ ofMesh ofTexture::getQuad(const glm::vec3 & p1, const glm::vec3 & p2, const glm:
 void ofTexture::readToPixels(ofPixels & pixels) const {
 #ifndef TARGET_OPENGLES
 	pixels.allocate(texData.width,texData.height,ofGetImageTypeFromGLType(texData.glInternalFormat));
-	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT,pixels.getWidth(),pixels.getBytesPerChannel(),pixels.getNumChannels());
+	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getBytesPerChannel()), static_cast<int>(pixels.getNumChannels()));
 	glBindTexture(texData.textureTarget,texData.textureID);
 	glGetTexImage(texData.textureTarget,0,ofGetGLFormat(pixels),GL_UNSIGNED_BYTE, pixels.getData());
 	glBindTexture(texData.textureTarget,0);
@@ -1230,7 +1230,7 @@ void ofTexture::readToPixels(ofPixels & pixels) const {
 void ofTexture::readToPixels(ofShortPixels & pixels) const {
 #ifndef TARGET_OPENGLES
 	pixels.allocate(texData.width,texData.height,ofGetImageTypeFromGLType(texData.glInternalFormat));
-	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT,pixels.getWidth(),pixels.getBytesPerChannel(),pixels.getNumChannels());
+	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getBytesPerChannel()), static_cast<int>(pixels.getNumChannels()));
 	glBindTexture(texData.textureTarget,texData.textureID);
 	glGetTexImage(texData.textureTarget,0,ofGetGLFormat(pixels),GL_UNSIGNED_SHORT,pixels.getData());
 	glBindTexture(texData.textureTarget,0);
@@ -1240,7 +1240,7 @@ void ofTexture::readToPixels(ofShortPixels & pixels) const {
 void ofTexture::readToPixels(ofFloatPixels & pixels) const {
 #ifndef TARGET_OPENGLES
 	pixels.allocate(texData.width,texData.height,ofGetImageTypeFromGLType(texData.glInternalFormat));
-	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT,pixels.getWidth(),pixels.getBytesPerChannel(),pixels.getNumChannels());
+	ofSetPixelStoreiAlignment(GL_PACK_ALIGNMENT, static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getBytesPerChannel()), static_cast<int>(pixels.getNumChannels()));
 	glBindTexture(texData.textureTarget,texData.textureID);
 	glGetTexImage(texData.textureTarget,0,ofGetGLFormat(pixels),GL_FLOAT,pixels.getData());
 	glBindTexture(texData.textureTarget,0);

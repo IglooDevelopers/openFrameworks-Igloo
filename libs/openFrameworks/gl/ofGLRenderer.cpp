@@ -121,10 +121,10 @@ void ofGLRenderer::draw(const ofMesh & vertexData, ofPolyRenderMode renderType, 
 	#ifdef TARGET_OPENGLES
 			glDrawElements(ofGetGLPrimitiveMode(vertexData.getMode()), vertexData.getNumIndices(),GL_UNSIGNED_SHORT,vertexData.getIndexPointer());
 	#else
-			glDrawElements(ofGetGLPrimitiveMode(vertexData.getMode()), vertexData.getNumIndices(),GL_UNSIGNED_INT,vertexData.getIndexPointer());
+			glDrawElements(ofGetGLPrimitiveMode(vertexData.getMode()), static_cast<GLsizei>(vertexData.getNumIndices()),GL_UNSIGNED_INT,vertexData.getIndexPointer());
 	#endif
 		}else{
-			glDrawArrays(ofGetGLPrimitiveMode(vertexData.getMode()), 0, vertexData.getNumVertices());
+			glDrawArrays(ofGetGLPrimitiveMode(vertexData.getMode()), 0, static_cast<GLsizei>(vertexData.getNumVertices()));
 		}
 
 		if(vertexData.getNumColors() && useColors){
@@ -215,15 +215,15 @@ void ofGLRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRenderMode render
 	glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(renderType));
 	if(mesh.getNumIndices() && renderType!=OF_MESH_POINTS){
 		if (primCount <= 1) {
-			drawElements(mesh.getVbo(),mode,mesh.getNumIndices());
+			drawElements(mesh.getVbo(),mode, static_cast<int>(mesh.getNumIndices()));
 		} else {
-			drawElementsInstanced(mesh.getVbo(),mode,mesh.getNumIndices(),primCount);
+			drawElementsInstanced(mesh.getVbo(),mode, static_cast<int>(mesh.getNumIndices()),primCount);
 		}
 	}else{
 		if (primCount <= 1) {
-			draw(mesh.getVbo(),mode,0,mesh.getNumVertices());
+			draw(mesh.getVbo(),mode,0, static_cast<int>(mesh.getNumVertices()));
 		} else {
-			drawInstanced(mesh.getVbo(),mode,0,mesh.getNumVertices(),primCount);
+			drawInstanced(mesh.getVbo(),mode,0, static_cast<int>(mesh.getNumVertices()),primCount);
 		}
 	}
 	glPolygonMode(GL_FRONT_AND_BACK, currentStyle.bFill ?  GL_FILL : GL_LINE);
@@ -274,7 +274,7 @@ void ofGLRenderer::draw(const ofPolyline & poly) const{
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &poly.getVertices()[0].x);
-		glDrawArrays(poly.isClosed()?GL_LINE_LOOP:GL_LINE_STRIP, 0, poly.size());
+		glDrawArrays(poly.isClosed()?GL_LINE_LOOP:GL_LINE_STRIP, 0, static_cast<GLsizei>(poly.size()));
 
 		// use smoothness, if requested:
 		if (currentStyle.smoothing) const_cast<ofGLRenderer*>(this)->endSmoothing();
@@ -1494,7 +1494,7 @@ void ofGLRenderer::drawCircle(float x, float y, float z,  float radius) const{
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &circlePoints[0].x);
-	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, circlePoints.size());
+	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, static_cast<GLsizei>(circlePoints.size()));
 
 	// use smoothness, if requested:
 	if (currentStyle.smoothing && !currentStyle.bFill) const_cast<ofGLRenderer*>(this)->endSmoothing();
@@ -1507,7 +1507,7 @@ void ofGLRenderer::drawEllipse(float x, float y, float z, float width, float hei
 	float radiusY = height*0.5;
 	const auto & circleCache = circlePolyline.getVertices();
 	for(size_t i=0;i<circleCache.size();i++){
-		circlePoints[i] = {radiusX*circlePolyline[i].x+x, radiusY*circlePolyline[i].y+y, z};
+		circlePoints[i] = {radiusX*circlePolyline[static_cast<int>(i)].x+x, radiusY*circlePolyline[static_cast<int>(i)].y+y, z};
 	}
 
 	// use smoothness, if requested:
@@ -1515,7 +1515,7 @@ void ofGLRenderer::drawEllipse(float x, float y, float z, float width, float hei
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, sizeof(glm::vec3), &circlePoints[0].x);
-	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, circlePoints.size());
+	glDrawArrays(currentStyle.bFill ? GL_TRIANGLE_FAN : GL_LINE_STRIP, 0, static_cast<GLsizei>(circlePoints.size()));
 
 	// use smoothness, if requested:
 	if (currentStyle.smoothing && !currentStyle.bFill) const_cast<ofGLRenderer*>(this)->endSmoothing();

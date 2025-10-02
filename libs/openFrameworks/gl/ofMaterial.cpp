@@ -766,37 +766,37 @@ void ofMaterial::initShaders(ofGLProgrammableRenderer & renderer) const{
 		shaders[&renderer]->numCubeMaps = numCubeMaps;
 		shaders[&renderer]->shaderId = shaderId;
 		
-        shaders[&renderer]->noTexture.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader,numLights,false,false,extraVertString,data));
-        shaders[&renderer]->noTexture.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data,numLights,false,false, definesString));
+        shaders[&renderer]->noTexture.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader, static_cast<int>(numLights),false,false,extraVertString,data));
+        shaders[&renderer]->noTexture.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data, static_cast<int>(numLights),false,false, definesString));
         shaders[&renderer]->noTexture.bindDefaults();
         shaders[&renderer]->noTexture.linkProgram();
 
-        shaders[&renderer]->texture2D.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader,numLights,true,false,extraVertString,data));
-        shaders[&renderer]->texture2D.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data,numLights,true,false,definesString));
+        shaders[&renderer]->texture2D.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader, static_cast<int>(numLights),true,false,extraVertString,data));
+        shaders[&renderer]->texture2D.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data, static_cast<int>(numLights),true,false,definesString));
         shaders[&renderer]->texture2D.bindDefaults();
         shaders[&renderer]->texture2D.linkProgram();
 
         #ifndef TARGET_OPENGLES
-            shaders[&renderer]->textureRect.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertexRectHeader,numLights,true,false,extraVertString,data));
-            shaders[&renderer]->textureRect.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragmentRectHeader, customUniforms, data,numLights,true,false,definesString));
+            shaders[&renderer]->textureRect.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertexRectHeader, static_cast<int>(numLights),true,false,extraVertString,data));
+            shaders[&renderer]->textureRect.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragmentRectHeader, customUniforms, data, static_cast<int>(numLights),true,false,definesString));
             shaders[&renderer]->textureRect.bindDefaults();
             shaders[&renderer]->textureRect.linkProgram();
         #endif
 
-        shaders[&renderer]->color.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader,numLights,false,true,extraVertString,data));
-        shaders[&renderer]->color.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data,numLights,false,true, definesString));
+        shaders[&renderer]->color.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader, static_cast<int>(numLights),false,true,extraVertString,data));
+        shaders[&renderer]->color.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data, static_cast<int>(numLights),false,true, definesString));
         shaders[&renderer]->color.bindDefaults();
         shaders[&renderer]->color.linkProgram();
 
 
-        shaders[&renderer]->texture2DColor.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader,numLights,true,true,extraVertString,data));
-        shaders[&renderer]->texture2DColor.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data,numLights,true,true,definesString));
+        shaders[&renderer]->texture2DColor.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertex2DHeader, static_cast<int>(numLights),true,true,extraVertString,data));
+        shaders[&renderer]->texture2DColor.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragment2DHeader, customUniforms, data, static_cast<int>(numLights),true,true,definesString));
         shaders[&renderer]->texture2DColor.bindDefaults();
         shaders[&renderer]->texture2DColor.linkProgram();
 
         #ifndef TARGET_OPENGLES
-            shaders[&renderer]->textureRectColor.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertexRectHeader,numLights,true,true,extraVertString,data));
-            shaders[&renderer]->textureRectColor.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragmentRectHeader, customUniforms, data,numLights,true,true,definesString));
+            shaders[&renderer]->textureRectColor.setupShaderFromSource(GL_VERTEX_SHADER,vertexSource(isPBR(),vertexRectHeader, static_cast<int>(numLights),true,true,extraVertString,data));
+            shaders[&renderer]->textureRectColor.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentSource(isPBR(),fragmentRectHeader, customUniforms, data, static_cast<int>(numLights),true,true,definesString));
             shaders[&renderer]->textureRectColor.bindDefaults();
             shaders[&renderer]->textureRectColor.linkProgram();
         #endif

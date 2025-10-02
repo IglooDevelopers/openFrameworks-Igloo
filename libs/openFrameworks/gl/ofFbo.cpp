@@ -462,7 +462,7 @@ void ofFbo::clearColorBuffer(const ofFloatColor & color){
 
 //--------------------------------------------------------------
 void ofFbo::clearColorBuffer(size_t buffer_idx, const ofFloatColor & color){
-	glClearBufferfv(GL_COLOR, buffer_idx, &color.r);
+	glClearBufferfv(GL_COLOR, static_cast<GLint>(buffer_idx), &color.r);
 }
 
 //--------------------------------------------------------------
@@ -786,7 +786,7 @@ void ofFbo::attachTexture(ofTexture & tex, GLenum internalFormat, GLenum attachm
     
 	settings.colorFormats.resize(attachmentPoint + 1);
 	settings.colorFormats[attachmentPoint] = internalFormat;
-	settings.numColorbuffers = settings.colorFormats.size();
+	settings.numColorbuffers = static_cast<int>(settings.colorFormats.size());
     
 	// if MSAA, bind main fbo and attach renderbuffer
 	if(settings.numSamples) {
@@ -919,7 +919,7 @@ void ofFbo::flagDirty() const{
 		// flagged dirty at activation, so we can be sure all buffers which have 
 		// been rendered to are flagged dirty.
 		// 
-		int numBuffersToFlag = std::min(dirty.size(), activeDrawBuffers.size());
+		int numBuffersToFlag = static_cast<int>(std::min(dirty.size(), activeDrawBuffers.size()));
 		for(int i=0; i < numBuffersToFlag; i++){
 			dirty[i] = true;
 		}
@@ -928,7 +928,7 @@ void ofFbo::flagDirty() const{
 
 //----------------------------------------------------------
 int ofFbo::getNumTextures() const {
-	return textures.size();
+	return static_cast<int>(textures.size());
 }
 
 //----------------------------------------------------------
@@ -944,7 +944,7 @@ void ofFbo::setActiveDrawBuffer(int i){
 void ofFbo::setActiveDrawBuffers(const vector<int>& ids){
 	if(!bIsAllocated) return;
 #ifndef TARGET_OPENGLES
-    int numBuffers = activeDrawBuffers.size();
+    int numBuffers = static_cast<int>(activeDrawBuffers.size());
 	activeDrawBuffers.clear();
 	activeDrawBuffers.resize(numBuffers, GL_NONE); // we initialise the vector with GL_NONE, so a buffer will not be written to unless activated.
     for(int i=0; i < (int)ids.size(); i++){
@@ -957,7 +957,7 @@ void ofFbo::setActiveDrawBuffers(const vector<int>& ids){
             ofLogWarning("ofFbo") << "setActiveDrawBuffers(): fbo " << fbo << " couldn't set texture " << i << ", only " << getNumTextures() << "allocated";
         }
     }
-    glDrawBuffers(activeDrawBuffers.size(),&activeDrawBuffers[0]);
+    glDrawBuffers(static_cast<GLsizei>(activeDrawBuffers.size()),&activeDrawBuffers[0]);
 #endif
 }
 

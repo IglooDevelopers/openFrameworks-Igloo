@@ -288,7 +288,7 @@ bool ofShader::setup(const TransformFeedbackSettings & settings) {
 		std::transform(settings.varyingsToCapture.begin(), settings.varyingsToCapture.end(), varyings.begin(), [](const std::string & str) {
 			return str.c_str();
 		});
-		glTransformFeedbackVaryings(getProgram(), varyings.size(), varyings.data(), settings.bufferMode);
+		glTransformFeedbackVaryings(getProgram(), static_cast<GLsizei>(varyings.size()), varyings.data(), settings.bufferMode);
 	}
 	return linkProgram();
 }
@@ -391,7 +391,7 @@ bool ofShader::setupShaderFromSource(ofShader::Source && source){
 
 	// compile shader
 	const char* sptr = shader.source.expandedSource.c_str();
-	int ssize = shader.source.expandedSource.size();
+	int ssize = static_cast<int>(shader.source.expandedSource.size());
 	glShaderSource(shaderId, 1, &sptr, &ssize);
 	glCompileShader(shaderId);
 

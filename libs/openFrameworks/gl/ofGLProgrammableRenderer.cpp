@@ -209,7 +209,7 @@ void ofGLProgrammableRenderer::draw(const ofMesh & vertexData, ofPolyRenderMode 
 	if(meshVbo.getUsingIndices()) {
 		drawElements(meshVbo,drawMode, meshVbo.getNumIndices());
 	} else {
-		draw(meshVbo, drawMode, 0, vertexData.getNumVertices());
+		draw(meshVbo, drawMode, 0, static_cast<int>(vertexData.getNumVertices()));
 	}
 	
 	// tig: note further that we could glGet() and store the current polygon mode, but don't, since that would
@@ -240,15 +240,15 @@ void ofGLProgrammableRenderer::drawInstanced(const ofVboMesh & mesh, ofPolyRende
 	glPolygonMode(GL_FRONT_AND_BACK, ofGetGLPolyMode(renderType));
 	if(mesh.getNumIndices() && renderType!=OF_MESH_POINTS){
 		if (primCount <= 1) {
-			drawElements(mesh.getVbo(),mode,mesh.getNumIndices());
+			drawElements(mesh.getVbo(),mode, static_cast<int>(mesh.getNumIndices()));
 		} else {
-			drawElementsInstanced(mesh.getVbo(),mode,mesh.getNumIndices(),primCount);
+			drawElementsInstanced(mesh.getVbo(),mode, static_cast<int>(mesh.getNumIndices()),primCount);
 		}
 	}else{
 		if (primCount <= 1) {
-			draw(mesh.getVbo(),mode,0,mesh.getNumVertices());
+			draw(mesh.getVbo(),mode,0, static_cast<int>(mesh.getNumVertices()));
 		} else {
-			drawInstanced(mesh.getVbo(),mode,0,mesh.getNumVertices(),primCount);
+			drawInstanced(mesh.getVbo(),mode,0, static_cast<int>(mesh.getNumVertices()),primCount);
 		}
 	}
 
@@ -318,8 +318,8 @@ void ofGLProgrammableRenderer::draw(const ofPolyline & poly) const{
 
 #else
 
-	meshVbo.setVertexData(&poly.getVertices()[0], poly.size(), GL_DYNAMIC_DRAW);
-	meshVbo.draw(poly.isClosed()?GL_LINE_LOOP:GL_LINE_STRIP, 0, poly.size());
+	meshVbo.setVertexData(&poly.getVertices()[0], static_cast<int>(poly.size()), GL_DYNAMIC_DRAW);
+	meshVbo.draw(poly.isClosed()?GL_LINE_LOOP:GL_LINE_STRIP, 0, static_cast<int>(poly.size()));
 
 #endif
 	// use smoothness, if requested:

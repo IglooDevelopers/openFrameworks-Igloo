@@ -15,7 +15,9 @@
 #include "ofFbo.h"
 #include "ofConstants.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include <map>
@@ -149,7 +151,7 @@ void ofCubeMap::_checkSetup() {
 		// search for the first free block
 		for(size_t i=0; i<ofCubeMapsData().size(); i++) {
 			if(ofCubeMapsData()[i].expired()) {
-				data->index = i;
+				data->index = static_cast<int>(i);
 				ofCubeMapsData()[i] = data;
 				bFound = true;
 				break;
@@ -157,7 +159,7 @@ void ofCubeMap::_checkSetup() {
 		}
 		if(!bFound && ofIsGLProgrammableRenderer()){
 			ofCubeMapsData().push_back(data);
-			data->index = ofCubeMapsData().size() - 1;
+			data->index = static_cast<int>(ofCubeMapsData().size() - 1);
 			bFound = true;
 		}
 	}
@@ -809,7 +811,7 @@ void ofCubeMap::_createIrradianceMap(GLuint aSrcCubeFid, bool aBMakeCache, const
 			GLuint gFormat = getGlTypeFromInternalFormat();
 			// we need to create a single image //
 			for (unsigned int i = 0; i < 6; i++) {
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, texFormat, fpixels[i].getWidth(), fpixels[i].getHeight(), 0, gFormat, texStorageFormat, fpixels[i].getData() );
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, texFormat, static_cast<GLsizei>(fpixels[i].getWidth()), static_cast<GLsizei>(fpixels[i].getHeight()), 0, gFormat, texStorageFormat, fpixels[i].getData() );
 			}
 			glBindTexture(textureTarget, 0 );
 			
@@ -906,7 +908,7 @@ bool ofCubeMap::_loadIrradianceMap(const of::filesystem::path & aCachePath) {
 	
 //	_configureCubeTextures(data->irradianceMapId, false);
 	
-	int texSize = fullPix.getWidth() / 3;
+	int texSize = static_cast<int>(fullPix.getWidth() / 3);
 	
 	ofFloatPixels fpix;
 	size_t numChannels = getNumPixelChannels();
@@ -930,7 +932,7 @@ bool ofCubeMap::_loadIrradianceMap(const of::filesystem::path & aCachePath) {
 		if( fpix.getNumChannels() != numChannels ) {
 			fpix.setNumChannels(numChannels);
 		}
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, loadTexFormat, fpix.getWidth(), fpix.getHeight(), 0, gFormat, texStorageFormat, fpix.getData() );
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, 0, loadTexFormat, static_cast<GLsizei>(fpix.getWidth()), static_cast<GLsizei>(fpix.getHeight()), 0, gFormat, texStorageFormat, fpix.getData() );
 	}
 	glBindTexture(textureTarget, 0 );
 	

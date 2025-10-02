@@ -13,7 +13,9 @@
 #include "ofGLProgrammableRenderer.h"
 #include "ofConstants.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
@@ -938,7 +940,7 @@ void ofShadow::_checkSetup() {
 		// search for the first free block
 		for(size_t i=0; i<ofShadowsData().size(); i++) {
 			if(ofShadowsData()[i].expired()) {
-				data->index = i;
+				data->index = static_cast<int>(i);
 				data->isEnabled = false;
 				ofShadowsData()[i] = data;
 				bShadowFound = true;
@@ -947,7 +949,7 @@ void ofShadow::_checkSetup() {
 		}
 		if(!bShadowFound && ofIsGLProgrammableRenderer()){
 			ofShadowsData().push_back(data);
-			data->index = ofShadowsData().size() - 1;
+			data->index = static_cast<int>(ofShadowsData().size() - 1);
 			data->isEnabled = false;
 			bShadowFound = true;
 		}

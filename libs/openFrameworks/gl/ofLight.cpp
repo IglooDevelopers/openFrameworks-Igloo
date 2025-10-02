@@ -111,7 +111,7 @@ void ofLight::setup() {
 		// search for the first free block
 		for(size_t i=0; i<ofLightsData().size(); i++) {
 			if(ofLightsData()[i].expired()) {
-				data->glIndex = i;
+				data->glIndex = static_cast<int>(i);
 				data->isEnabled = true;
 				ofLightsData()[i] = data;
 				bLightFound = true;
@@ -120,7 +120,7 @@ void ofLight::setup() {
 		}
 		if(!bLightFound && ofIsGLProgrammableRenderer()){
 			ofLightsData().push_back(data);
-			data->glIndex = ofLightsData().size() - 1;
+			data->glIndex = static_cast<int>(ofLightsData().size() - 1);
 			data->isEnabled = true;
 			bLightFound = true;
 		}

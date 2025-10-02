@@ -123,19 +123,19 @@ void ofVboMesh::updateVbo(){
 			ofAddListener(ofxAndroidEvents().unloadGL,this,&ofVboMesh::unloadVbo);
 		#endif
 		if(getNumVertices()){
-			vbo.setVertexData(getVerticesPointer(),getNumVertices(),usage);
+			vbo.setVertexData(getVerticesPointer(), static_cast<int>(getNumVertices()),usage);
 		}
 		if(getNumColors()){
-			vbo.setColorData(getColorsPointer(),getNumColors(),usage);
+			vbo.setColorData(getColorsPointer(), static_cast<int>(getNumColors()),usage);
 		}
 		if(getNumNormals()){
-			vbo.setNormalData(getNormalsPointer(),getNumNormals(),usage);
+			vbo.setNormalData(getNormalsPointer(), static_cast<int>(getNumNormals()),usage);
 		}
 		if(getNumTexCoords()){
-			vbo.setTexCoordData(getTexCoordsPointer(),getNumTexCoords(),usage);
+			vbo.setTexCoordData(getTexCoordsPointer(), static_cast<int>(getNumTexCoords()),usage);
 		}
 		if(getNumIndices()){
-			vbo.setIndexData(getIndexPointer(),getNumIndices(),usage);
+			vbo.setIndexData(getIndexPointer(), static_cast<int>(getNumIndices()),usage);
 		}
 		vboNumIndices = getNumIndices();
 		vboNumVerts = getNumVertices();
@@ -157,10 +157,10 @@ void ofVboMesh::updateVbo(){
 				vbo.clearVertices();
 				vboNumVerts = getNumVertices();
 			}else if(vboNumVerts<getNumVertices()){
-				vbo.setVertexData(getVerticesPointer(),getNumVertices(),usage);
+				vbo.setVertexData(getVerticesPointer(), static_cast<int>(getNumVertices()),usage);
 				vboNumVerts = getNumVertices();
 			}else{
-				vbo.updateVertexData(getVerticesPointer(),getNumVertices());
+				vbo.updateVertexData(getVerticesPointer(), static_cast<int>(getNumVertices()));
 			}
 		}
 
@@ -169,10 +169,10 @@ void ofVboMesh::updateVbo(){
 				vbo.clearColors();
 				vboNumColors = getNumColors();
 			}else if(vboNumColors<getNumColors()){
-				vbo.setColorData(getColorsPointer(),getNumColors(),usage);
+				vbo.setColorData(getColorsPointer(), static_cast<int>(getNumColors()),usage);
 				vboNumColors = getNumColors();
 			}else{
-				vbo.updateColorData(getColorsPointer(),getNumColors());
+				vbo.updateColorData(getColorsPointer(), static_cast<int>(getNumColors()));
 			}
 		}
 
@@ -181,10 +181,10 @@ void ofVboMesh::updateVbo(){
 				vbo.clearNormals();
 				vboNumNormals = getNumNormals();
 			}else if(vboNumNormals<getNumNormals()){
-				vbo.setNormalData(getNormalsPointer(),getNumNormals(),usage);
+				vbo.setNormalData(getNormalsPointer(), static_cast<int>(getNumNormals()),usage);
 				vboNumNormals = getNumNormals();
 			}else{
-				vbo.updateNormalData(getNormalsPointer(),getNumNormals());
+				vbo.updateNormalData(getNormalsPointer(), static_cast<int>(getNumNormals()));
 			}
 		}
 
@@ -193,10 +193,10 @@ void ofVboMesh::updateVbo(){
 				vbo.clearTexCoords();
 				vboNumTexCoords = getNumTexCoords();
 			}else if(vboNumTexCoords<getNumTexCoords()){
-				vbo.setTexCoordData(getTexCoordsPointer(),getNumTexCoords(),usage);
+				vbo.setTexCoordData(getTexCoordsPointer(), static_cast<int>(getNumTexCoords()),usage);
 				vboNumTexCoords = getNumTexCoords();
 			}else{
-				vbo.updateTexCoordData(getTexCoordsPointer(),getNumTexCoords());
+				vbo.updateTexCoordData(getTexCoordsPointer(), static_cast<int>(getNumTexCoords()));
 			}
 		}
 
@@ -205,10 +205,10 @@ void ofVboMesh::updateVbo(){
 				vbo.clearIndices();
 				vboNumIndices = getNumIndices();
 			}else if(vboNumIndices<getNumIndices()){
-				vbo.setIndexData(getIndexPointer(),getNumIndices(),usage);
+				vbo.setIndexData(getIndexPointer(), static_cast<int>(getNumIndices()),usage);
 				vboNumIndices = getNumIndices();
 			}else{
-				vbo.updateIndexData(getIndexPointer(),getNumIndices());
+				vbo.updateIndexData(getIndexPointer(), static_cast<int>(getNumIndices()));
 			}
 		}
 	}
