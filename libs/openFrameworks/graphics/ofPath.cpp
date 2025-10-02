@@ -879,8 +879,8 @@ void ofPath::scale(float x, float y){
 	}else{
 		for(std::size_t i=0;i<polylines.size();i++){
 			for(std::size_t j=0;j<polylines[i].size();j++){
-				polylines[i][j].x*=x;
-				polylines[i][j].y*=y;
+				polylines[i][static_cast<int>(j)].x*=x;
+				polylines[i][static_cast<int>(j)].y*=y;
 			}
 		}
 	}

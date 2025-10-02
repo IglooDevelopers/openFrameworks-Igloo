@@ -2,6 +2,7 @@
 
 #include "ofTexture.h"
 #include "ofGLBaseTypes.h"
+#include <ofPixels.h>
 #include "ofGraphicsConstants.h"
 #include "ofGLUtils.h"
 #include "ofConstants.h"
@@ -688,7 +689,7 @@ void ofImage_<PixelType>::clone(const ofImage_<SrcType> &mom){
     tex.clear();
     bUseTexture = mom.isUsingTexture();
     if (bUseTexture == true && mom.getTexture().isAllocated()){
-        tex.allocate(pixels.getWidth(), pixels.getHeight(), ofGetGLInternalFormat(pixels));
+        tex.allocate(static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getHeight()), ofGetGLInternalFormat(pixels));
     }
 
     update();

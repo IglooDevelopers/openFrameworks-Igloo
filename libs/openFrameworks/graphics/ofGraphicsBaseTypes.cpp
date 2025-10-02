@@ -1,7 +1,9 @@
 #include "ofGraphicsBaseTypes.h"
 #include "ofRectangle.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/vec2.hpp"
 #include "glm/trigonometric.hpp"
 

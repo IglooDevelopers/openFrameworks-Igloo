@@ -360,12 +360,12 @@ void ofCairoRenderer::draw(const ofMesh & primitive, ofPolyRenderMode mode, bool
 		i=2;
 	}
 	for(; i<primitive.getNumIndices(); i++){
-		v = transform(primitive.getVertex(primitive.getIndex(i)));
+		v = transform(primitive.getVertex(primitive.getIndex(static_cast<ofIndexType>(i))));
 		switch(primitive.getMode()){
 		case(OF_PRIMITIVE_TRIANGLES):
 			if((i+1)%3==0){
 				cairo_line_to(cr,v.x,v.y);
-				v2 = transform(primitive.getVertex(primitive.getIndex(i-2)));
+				v2 = transform(primitive.getVertex(primitive.getIndex(static_cast<ofIndexType>(i-2))));
 				cairo_line_to(cr,v2.x,v2.y);
 				cairo_move_to(cr,v.x,v.y);
 			}else if((i+3)%3==0){
@@ -376,7 +376,7 @@ void ofCairoRenderer::draw(const ofMesh & primitive, ofPolyRenderMode mode, bool
 
 		break;
 		case(OF_PRIMITIVE_TRIANGLE_STRIP):
-				v2 = transform(primitive.getVertex(primitive.getIndex(i-2)));
+				v2 = transform(primitive.getVertex(primitive.getIndex(static_cast<ofIndexType>(i-2))));
 				cairo_line_to(cr,v.x,v.y);
 				cairo_line_to(cr,v2.x,v2.y);
 				cairo_move_to(cr,v.x,v.y);
@@ -395,7 +395,7 @@ void ofCairoRenderer::draw(const ofMesh & primitive, ofPolyRenderMode mode, bool
 		}
 	}
 
-	cairo_move_to(cr,primitive.getVertex(primitive.getIndex(primitive.getNumIndices()-1)).x,primitive.getVertex(primitive.getIndex(primitive.getNumIndices()-1)).y);
+	cairo_move_to(cr,primitive.getVertex(primitive.getIndex(static_cast<ofIndexType>(primitive.getNumIndices()-1))).x,primitive.getVertex(primitive.getIndex(static_cast<ofIndexType>(primitive.getNumIndices()-1))).y);
 
 	if(currentStyle.lineWidth>0){
 
@@ -528,7 +528,7 @@ void ofCairoRenderer::draw(const ofPixels & raw, float x, float y, float z, floa
 	mut_this->scale(w/pix.getWidth(),h/pix.getHeight());
 	cairo_surface_t *image;
 	int stride=0;
-	int picsize = pix.getWidth()* pix.getHeight();
+	int picsize = static_cast<int>(pix.getWidth()* pix.getHeight());
 	const unsigned char *imgPix = pix.getData();
 
 	vector<unsigned char> swapPixels;
@@ -552,8 +552,8 @@ void ofCairoRenderer::draw(const ofPixels & raw, float x, float y, float z, floa
 			swapPixels[p*4 +2] = imgPix[p*3 +2];
 		}
 #endif
-		stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, pix.getWidth());
-		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, pix.getWidth(), pix.getHeight(), stride);
+		stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, static_cast<int>(pix.getWidth()));
+		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), stride);
 		break;
 	case OF_IMAGE_COLOR_ALPHA:
 #ifdef TARGET_LITTLE_ENDIAN
@@ -565,8 +565,8 @@ void ofCairoRenderer::draw(const ofPixels & raw, float x, float y, float z, floa
 			swapPixels[p*4 +2] = imgPix[p*4];
 			swapPixels[p*4 +3] = imgPix[p*4+3];
 		}
-		stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, pix.getWidth());
-		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_ARGB32, pix.getWidth(), pix.getHeight(), stride);
+		stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, static_cast<int>(pix.getWidth()));
+		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_ARGB32, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), stride);
 #else
 		stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, pix.getWidth());
 		image = cairo_image_surface_create_for_data(pix.getData(), CAIRO_FORMAT_ARGB32, pix.getWidth(), pix.getHeight(), stride);
@@ -580,8 +580,8 @@ void ofCairoRenderer::draw(const ofPixels & raw, float x, float y, float z, floa
 			swapPixels[p*4 +1] = imgPix[p];
 			swapPixels[p*4 +2] = imgPix[p];
 		}
-		stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, pix.getWidth());
-		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, pix.getWidth(), pix.getHeight(), stride);
+		stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, static_cast<int>(pix.getWidth()));
+		image = cairo_image_surface_create_for_data(&swapPixels[0], CAIRO_FORMAT_RGB24, static_cast<int>(pix.getWidth()), static_cast<int>(pix.getHeight()), stride);
 		break;
 	case OF_IMAGE_UNDEFINED:
 	default:

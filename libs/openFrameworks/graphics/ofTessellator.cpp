@@ -100,7 +100,7 @@ void ofTessellator::init(){
 void ofTessellator::tessellateToMesh( const ofPolyline& src,  ofPolyWindingMode polyWindingMode, ofMesh& dstmesh, bool bIs2D){
 
 	ofPolyline& polyline = const_cast<ofPolyline&>(src);
-	tessAddContour( cacheTess, bIs2D?2:3, &polyline.getVertices()[0], sizeof(glm::vec3), polyline.size());
+	tessAddContour( cacheTess, bIs2D?2:3, &polyline.getVertices()[0], sizeof(glm::vec3), static_cast<int>(polyline.size()));
 
 	performTessellation( polyWindingMode, dstmesh, bIs2D );
 }
@@ -115,7 +115,7 @@ void ofTessellator::tessellateToMesh( const vector<ofPolyline>& src, ofPolyWindi
 		if (src[i].size() > 0) {
 			ofPolyline& polyline = const_cast<ofPolyline&>(src[i]);
 
-			tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0].x, sizeof(glm::vec3), polyline.size());
+			tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0].x, sizeof(glm::vec3), static_cast<int>(polyline.size()));
 		}
 	}
 
@@ -127,7 +127,7 @@ void ofTessellator::tessellateToPolylines( const ofPolyline& src,  ofPolyWinding
 
 	if (src.size() > 0) {
 		ofPolyline& polyline = const_cast<ofPolyline&>(src);
-		tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0], sizeof(glm::vec3), polyline.size());
+		tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0], sizeof(glm::vec3), static_cast<int>(polyline.size()));
 	}
 	performTessellation( polyWindingMode, dstpoly, bIs2D );
 }
@@ -141,7 +141,7 @@ void ofTessellator::tessellateToPolylines( const vector<ofPolyline>& src, ofPoly
 		if (src[i].size() > 0) {
 			ofPolyline& polyline = const_cast<ofPolyline&>(src[i]);
 
-			tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0].x, sizeof(glm::vec3), polyline.size());
+			tessAddContour(cacheTess, bIs2D ? 2 : 3, &polyline.getVertices()[0].x, sizeof(glm::vec3), static_cast<int>(polyline.size()));
 		}
 	}
 

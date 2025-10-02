@@ -329,7 +329,12 @@ void initWindows(){
 
 
 static string winFontPathByName(const string& fontname ){
-	return fonts_table[fontname];
+	if (fonts_table.find(fontname) != fonts_table.end()) {
+		for (auto it = fonts_table.begin(); it != fonts_table.end(); it++) {
+			if (ofIsStringInString(ofToLower(it->first), ofToLower(fontname))) return it->second;
+		}
+	}
+	return "";
 }
 #endif
 
@@ -1005,7 +1010,7 @@ void ofTrueTypeFont::drawChar(uint32_t c, float x, float y, bool vFlipped) const
 	ymin += y;
 	ymax += y;
 
-	ofIndexType firstIndex = stringQuads.getVertices().size();
+	ofIndexType firstIndex = static_cast<ofIndexType>(stringQuads.getVertices().size());
 
 	stringQuads.addVertex(glm::vec3(xmin,ymin,0.f));
 	stringQuads.addVertex(glm::vec3(xmax,ymin,0.f));

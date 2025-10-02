@@ -63,15 +63,15 @@ FREE_IMAGE_TYPE getFreeImageType(const ofFloatPixels& pix) {
 template<typename PixelType>
 FIBITMAP* getBmpFromPixels(const ofPixels_<PixelType> &pix){
 	const PixelType* pixels = pix.getData();
-	unsigned int width = pix.getWidth();
-	unsigned int height = pix.getHeight();
-    unsigned int bpp = pix.getBitsPerPixel();
+	unsigned int width = static_cast<unsigned int>(pix.getWidth());
+	unsigned int height = static_cast<unsigned int>(pix.getHeight());
+    unsigned int bpp = static_cast<unsigned int>(pix.getBitsPerPixel());
 
 	FREE_IMAGE_TYPE freeImageType = getFreeImageType(pix);
 	FIBITMAP* bmp = FreeImage_AllocateT(freeImageType, width, height, bpp);
 	unsigned char* bmpBits = FreeImage_GetBits(bmp);
 	if(bmpBits != nullptr) {
-		int srcStride = width * pix.getBytesPerPixel();
+		int srcStride = static_cast<int>(width * pix.getBytesPerPixel());
 		int dstStride = FreeImage_GetPitch(bmp);
 		unsigned char* src = (unsigned char*) pixels;
 		unsigned char* dst = bmpBits;
@@ -191,7 +191,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const of::filesystem::path& _f
 	state.uri = &uri;
 
 	if(uriParseUriA(&state, uriStr.c_str())!=URI_SUCCESS){
-		const int bytesNeeded = 8 + 3 * strlen(uriStr.c_str()) + 1;
+		const int bytesNeeded = 8 + 3 * static_cast<int>(strlen(uriStr.c_str())) + 1;
 		std::vector<char> absUri(bytesNeeded);
 	#ifdef TARGET_WIN32
 		uriWindowsFilenameToUriStringA(uriStr.c_str(), absUri.data());
@@ -254,7 +254,7 @@ static bool loadImage(ofPixels_<PixelType> & pix, const ofBuffer & buffer, const
 	FIBITMAP* bmp = nullptr;
 	FIMEMORY* hmem = nullptr;
 
-	hmem = FreeImage_OpenMemory((unsigned char*) buffer.getData(), buffer.size());
+	hmem = FreeImage_OpenMemory((unsigned char*) buffer.getData(), static_cast<DWORD>(buffer.size()));
 	if (hmem == nullptr){
 		ofLogError("ofImage") << "loadImage(): couldn't load image from ofBuffer, opening FreeImage memory failed";
 		return false;
@@ -333,7 +333,7 @@ bool ofLoadImage(ofTexture & tex, const of::filesystem::path& path, const ofImag
 	ofPixels pixels;
 	bool loaded = ofLoadImage(pixels, path, settings);
 	if(loaded){
-		tex.allocate(pixels.getWidth(), pixels.getHeight(), ofGetGLInternalFormat(pixels));
+		tex.allocate(static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getHeight()), ofGetGLInternalFormat(pixels));
 		tex.loadData(pixels);
 	}
 	return loaded;
@@ -344,7 +344,7 @@ bool ofLoadImage(ofTexture & tex, const ofBuffer & buffer, const ofImageLoadSett
 	ofPixels pixels;
 	bool loaded = ofLoadImage(pixels, buffer, settings);
 	if(loaded){
-		tex.allocate(pixels.getWidth(), pixels.getHeight(), ofGetGLInternalFormat(pixels));
+		tex.allocate(static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getHeight()), ofGetGLInternalFormat(pixels));
 		tex.loadData(pixels);
 	}
 	return loaded;
@@ -877,9 +877,9 @@ void ofImage_<PixelType>::allocate(int w, int h, ofImageType newType){
 		tex.allocate(pixels);
 	}
 
-	width	= pixels.getWidth();
-	height	= pixels.getHeight();
-	bpp		= pixels.getBitsPerPixel();
+	width	= static_cast<int>(pixels.getWidth());
+	height	= static_cast<int>(pixels.getHeight());
+	bpp		= static_cast<int>(pixels.getBitsPerPixel());
 	type	= pixels.getImageType();
 }
 
@@ -1023,7 +1023,7 @@ void  ofImage_<PixelType>::setFromPixels(const PixelType * newPixels, int w, int
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::setFromPixels(const ofPixels_<PixelType> & pixels){
-	setFromPixels(pixels.getData(),pixels.getWidth(),pixels.getHeight(),pixels.getImageType());
+	setFromPixels(pixels.getData(), static_cast<int>(pixels.getWidth()), static_cast<int>(pixels.getHeight()),pixels.getImageType());
 }
 
 //------------------------------------
@@ -1036,9 +1036,9 @@ ofImage_<PixelType> & ofImage_<PixelType>::operator=(ofPixels_<PixelType> & pixe
 //------------------------------------
 template<typename PixelType>
 void ofImage_<PixelType>::update(){
-	width = pixels.getWidth();
-	height = pixels.getHeight();
-	bpp = pixels.getBitsPerPixel();
+	width = static_cast<int>(pixels.getWidth());
+	height = static_cast<int>(pixels.getHeight());
+	bpp = static_cast<int>(pixels.getBitsPerPixel());
 	type = pixels.getImageType();
 	if (pixels.isAllocated() && bUseTexture){
 		int glInternalFormat = ofGetGLInternalFormat(pixels);

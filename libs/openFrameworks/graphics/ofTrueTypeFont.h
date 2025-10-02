@@ -7,6 +7,7 @@
 #include "ofPixels.h"
 #include "ofConstants.h"
 #include <unordered_map>
+#include <map>
 
 /// \file
 /// The ofTrueTypeFont class provides an interface to load fonts into

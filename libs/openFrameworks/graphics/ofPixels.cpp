@@ -2,7 +2,9 @@
 #include "ofPixels.h"
 #include "ofColor.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/common.hpp"
 #include <cstring>
 
