@@ -343,7 +343,7 @@ string ofParameterGroup::getType(std::size_t position) const{
 
 int ofParameterGroup::getPosition(const string& name) const{
 	if(obj->parametersIndex.find(escape(name))!=obj->parametersIndex.end())
-		return obj->parametersIndex.find(escape(name))->second;
+		return static_cast<int>(obj->parametersIndex.find(escape(name))->second);
 	return -1;
 }
 
