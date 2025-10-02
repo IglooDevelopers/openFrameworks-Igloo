@@ -3,7 +3,9 @@
 #include "ofMath.h"
 #include "ofMathConstants.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/gtc/quaternion.hpp"
 
 //----------------------------------------

@@ -323,12 +323,12 @@ public:
 
 	/// \brief Write data with `matrix(row,col)=number`
 	float& operator()(std::size_t row, std::size_t col) {
-		return _mat[row][col];
+		return _mat[row][static_cast<int>(col)];
 	}
 
 	/// \brief Read data with `matrix(row, col)`
 	float operator()(std::size_t row, std::size_t col) const {
-		return _mat[row][col];
+		return _mat[row][static_cast<int>(col)];
 	}
 
 	/// \brief returns a copy of row i
@@ -909,10 +909,10 @@ inline void ofMatrix4x4::postMultTranslate( const ofVec3f& v ) {
 		float tmp = v.getPtr()[i];
 		if (tmp == 0)
 			continue;
-		_mat[0][i] += tmp * _mat[0][3];
-		_mat[1][i] += tmp * _mat[1][3];
-		_mat[2][i] += tmp * _mat[2][3];
-		_mat[3][i] += tmp * _mat[3][3];
+		_mat[0][static_cast<int>(i)] += tmp * _mat[0][3];
+		_mat[1][static_cast<int>(i)] += tmp * _mat[1][3];
+		_mat[2][static_cast<int>(i)] += tmp * _mat[2][3];
+		_mat[3][static_cast<int>(i)] += tmp * _mat[3][3];
 	}
 }
 

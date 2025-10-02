@@ -2,7 +2,9 @@
 #include "ofVec3f.h"
 #include "ofVec4f.h"
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 
