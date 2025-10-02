@@ -1637,11 +1637,14 @@ void ofAppGLFWWindow::exit_cb(GLFWwindow* windowP_){
 
 //------------------------------------------------------------
 void ofAppGLFWWindow::setVerticalSync(bool bVerticalSync){
+	/*
 	if(bVerticalSync){
 		glfwSwapInterval( 1);
 	}else{
 		glfwSwapInterval(0);
 	}
+	*/
+	glfwSwapInterval(0);
 }
 
 //------------------------------------------------------------

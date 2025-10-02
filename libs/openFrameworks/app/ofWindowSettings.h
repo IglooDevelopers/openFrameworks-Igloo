@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef GLM_FORCE_CTOR_INIT
 #define GLM_FORCE_CTOR_INIT
+#endif
 #include "glm/vec2.hpp"
 #include <string>
 
