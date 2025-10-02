@@ -1364,7 +1364,7 @@ void  ofArduino::sendI2CWriteRequest(char slaveAddress, vector<char> bytes, int 
 		if (reg >= 0) {
 			sendValueAsTwo7bitBytes(reg);
 		}
-		for (int i = 0, length = bytes.size(); i < length; i++) {
+		for (int i = 0, length = static_cast<int>(bytes.size()); i < length; i++) {
 			sendValueAsTwo7bitBytes(bytes[i]);
 		}
 
@@ -1797,15 +1797,15 @@ bool ofArduino::isPin(int pin) const
 int ofArduino::convertAnalogPinToDigital(size_t pin) const
 {
 	if (pin < analogPinMap.size()) {
-		if (analogPinMap.count(pin) > 0) {
-			return analogPinMap[pin];
+		if (analogPinMap.count(static_cast<const int>(pin)) > 0) {
+			return analogPinMap[static_cast<int>(pin)];
 		}
 		else {
 			ofLogError("ofArduino") << "Pin " + ofToString(pin) + " is not an Analog Pin";
 			return -1;
 		}
 	}
-	return pin;
+	return static_cast<int>(pin);
 }
 
 //this returns the pin if its already within the analog pin map
@@ -1820,7 +1820,7 @@ int ofArduino::convertDigitalPinToAnalog(size_t pin) const
 		ofLogError("ofArduino") << "Pin " + ofToString(pin) + " is not an Analog Pin";
 		return -1;
 	}
-	return pin; //this pin is already in the range of analog pins
+	return static_cast<int>(pin); //this pin is already in the range of analog pins
 }
 
 //these functions can't really account for user error 

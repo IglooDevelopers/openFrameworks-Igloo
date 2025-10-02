@@ -441,6 +441,10 @@ bool ofSerial::setup(string portName, int baud){
 		tOut.ReadIntervalTimeout = MAXDWORD;
 		tOut.ReadTotalTimeoutMultiplier = 0;
 		tOut.ReadTotalTimeoutConstant = 0;
+
+		tOut.WriteTotalTimeoutConstant = 100; //100mS pr write
+		tOut.WriteTotalTimeoutMultiplier = 10; //10mS pr byte
+
 		SetCommTimeouts(hComm, &tOut);
 
 		bInited = true;
@@ -487,7 +491,7 @@ long ofSerial::writeBytes(const char * buffer, size_t length){
 	#elif defined(TARGET_WIN32)
 
 		DWORD written;
-		if(!WriteFile(hComm, buffer, length, &written,0)){
+		if(!WriteFile(hComm, buffer, static_cast<DWORD>(length), &written,0)){
 			 ofLogError("ofSerial") << "writeBytes(): couldn't write to port";
 			 return OF_SERIAL_ERROR;
 		}
@@ -537,7 +541,7 @@ long ofSerial::readBytes(char * buffer, size_t length){
 	#elif defined( TARGET_WIN32 )
 
 		DWORD nRead = 0;
-		if (!ReadFile(hComm, buffer, length, &nRead, 0)){
+		if (!ReadFile(hComm, buffer, static_cast<DWORD>(length), &nRead, 0)){
 			ofLogError("ofSerial") << "readBytes(): couldn't read from port";
 			return OF_SERIAL_ERROR;
 		}
