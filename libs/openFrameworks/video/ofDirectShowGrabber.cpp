@@ -121,7 +121,7 @@ std::vector<ofVideoDevice> ofDirectShowGrabber::listDevices() const {
         for(std::size_t i = 0; i < devList.size(); i++){
             ofVideoDevice vd; 
             vd.deviceName = devList[i]; 
-            vd.id = i;  
+            vd.id = static_cast<int>(i);
             vd.bAvailable = true; 
             devices.push_back(vd); 
         }
