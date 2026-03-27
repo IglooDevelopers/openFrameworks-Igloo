@@ -98,6 +98,39 @@ ofLog::ofLog(ofLogLevel level, const string & message){
 
 
 //--------------------------------------------------
+static std::string wideToNarrow(const wchar_t* ws){
+	if(!ws) return {};
+#ifdef TARGET_WIN32
+	int size = WideCharToMultiByte(CP_UTF8, 0, ws, -1, nullptr, 0, nullptr, nullptr);
+	if(size <= 1) return {};
+	std::string s(size - 1, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, ws, -1, &s[0], size, nullptr, nullptr);
+	return s;
+#else
+	std::wstring w(ws);
+	return std::string(w.begin(), w.end()); // ASCII-range only fallback
+#endif
+}
+
+ofLog& ofLog::operator<<(wchar_t value){
+	wchar_t buf[2] = {value, L'\0'};
+	return operator<<(static_cast<const wchar_t*>(buf));
+}
+
+ofLog& ofLog::operator<<(wchar_t* value){
+	return operator<<(static_cast<const wchar_t*>(value));
+}
+
+ofLog& ofLog::operator<<(const wchar_t* value){
+	static_cast<std::ostream&>(message) << wideToNarrow(value) << getPadding();
+	return *this;
+}
+
+ofLog& ofLog::operator<<(const std::wstring& value){
+	return operator<<(value.c_str());
+}
+
+//--------------------------------------------------
 void ofLog::setAutoSpace(bool autoSpace){
 	bAutoSpace = autoSpace;
 	if(bAutoSpace){

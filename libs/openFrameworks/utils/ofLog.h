@@ -477,12 +477,18 @@ class ofLog{
 		/// \tparam T the data type to be streamed.
 		/// \param value the data to be streamed.
 		/// \returns A reference to itself.
-		template <class T> 
+		template <class T>
 		ofLog& operator<<(const T& value){
-			message << value << getPadding();
+			static_cast<std::ostream&>(message) << value << getPadding();
 			return *this;
 		}
-	
+
+		// Wide character overloads: operator<<(ostream, wchar_t*) is deleted in C++20.
+		ofLog& operator<<(wchar_t value);
+		ofLog& operator<<(wchar_t* value);
+		ofLog& operator<<(const wchar_t* value);
+		ofLog& operator<<(const std::wstring& value);
+
 		/// \brief Define flexible stream operator.
 		///
 		/// This allows the class to use the << std::ostream to catch function
@@ -491,7 +497,7 @@ class ofLog{
 		/// \param func A function pointer that takes a std::ostream as an argument.
 		/// \returns A reference to itself.
 		ofLog& operator<<(std::ostream& (*func)(std::ostream&)){
-			func(message);
+			func(static_cast<std::ostream&>(message));
 			return *this;
 		}
 	
